@@ -15,7 +15,7 @@ SELECT product_code, product_name, list_price, discount_percent
 #-----------------------------------------------------Part 2; Exercise #2
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared
 
 SELECT CONCAT(last_name, ', ', first_name) AS full_name
   FROM customers
