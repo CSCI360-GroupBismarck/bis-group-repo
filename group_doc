@@ -63,6 +63,10 @@ ORDER BY c.category_name, p.product_name ASC;
 first_name, last_name, line1, city, state, zip_code.
 Return one row for each address for the customer with an email address of allan.sherwood@yahoo.com.*/
 
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
 SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
 FROM customers c JOIN addresses a 
 ON c.customer_id = a.customer_id
