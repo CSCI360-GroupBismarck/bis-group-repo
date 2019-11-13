@@ -1,0 +1,149 @@
+#-----------------------------------------------------Part 2; Exercise #1
+#submitted by: Laura
+#updated by:
+#verified by: *needs review*
+
+SELECT product_code, product_name, list_price, discount_percent
+  FROM products;
+  
+SELECT product_code, product_name, list_price, discount_percent
+  FROM products
+ ORDER BY list_price;  
+ 
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 2; Exercise #2
+#submitted by: Laura
+#updated by:
+#verified by: Jared
+
+SELECT CONCAT(last_name, ', ', first_name) AS full_name
+  FROM customers
+ WHERE LEFT(last_name, 1) BETWEEN 'M' and 'Z'
+ ORDER BY last_name;
+ 
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 2; Exercise #3
+#submitted by: Laura
+#updated by:
+#verified by: *needs review*
+
+SELECT product_name, list_price, date_added
+  FROM products
+ WHERE list_price BETWEEN 500 AND 2000
+ ORDER BY date_added DESC;
+
+#------------------------------------------------------------------------
+
+
+
+
+
+
+
+/*Part 3; Exercise #1
+1.	Write a SELECT statement that joins the Categories table to the Products table and returns these columns: 
+category_name, product_name, list_price.
+Sort the result set by the category_name column and then by the product_name column in ascending sequence.*/
+
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.category_name, p.product_name, p.list_price
+FROM categories c JOIN products p
+ON c.category_id = p.category_id
+ORDER BY c.category_name, p.product_name ASC;
+
+#------------------------------------------------------------------------
+
+/*Part 3; Exercise #2
+2.	Write a SELECT statement that joins the Customers table to the Addresses table and returns these columns: 
+first_name, last_name, line1, city, state, zip_code.
+Return one row for each address for the customer with an email address of allan.sherwood@yahoo.com.*/
+
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
+FROM customers c JOIN addresses a 
+ON c.customer_id = a.customer_id
+WHERE email_address = "allan.sherwood@yahoo.com";
+
+#------------------------------------------------------------------------
+
+
+
+
+
+
+
+/*Part 5; Exercise #4
+4.	Write a SELECT statement that returns one row for each customer that has orders with these columns:
+The email_address column from the Customers table
+A count of the number of orders
+The total amount for each order (Hint: First, subtract the discount amount from the price. Then, multiply by the quantity.)
+Return only those rows where the customer has more than 1 order.
+Sort the result set in descending sequence by the sum of the line item amounts.*/
+
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.email_address, 
+count(o.order_id) AS number_of_orders, 
+((oi.item_price - oi.discount_amount) * oi.quantity) AS total_amount
+FROM customers c JOIN orders o
+ON c.customer_id = o.customer_id
+JOIN order_items oi
+ON o.order_id = oi.order_id
+GROUP BY o.customer_id
+HAVING count(o.order_id) > 1
+ORDER BY total_amount DESC;
+
+#------------------------------------------------------------------------
+
+/*Part 5; Exercise #5
+5.	Modify the solution to exercise 4 so it only counts and totals line items that have an 
+item_price value that’s greater than 400.*/
+
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.email_address, 
+count(o.order_id) AS number_of_orders, 
+((oi.item_price - oi.discount_amount) * oi.quantity) AS total_amount
+FROM customers c JOIN orders o
+ON c.customer_id = o.customer_id
+JOIN order_items oi
+ON o.order_id = oi.order_id
+where oi.item_price > 400
+GROUP BY o.customer_id
+ORDER BY total_amount DESC;
+
+#------------------------------------------------------------------------
+
+/*Part 5; Exercise #7
+7.	Write a SELECT statement that answers this question: Which customers have ordered more than one product? 
+Return these columns:
+The email_address column from the Customers table
+The count of distinct products from the customer’s orders
+Sort the result set in ascending sequence by the email_address column.*/
+
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.email_address, count(oi.order_id) AS number_of_products
+FROM customers c JOIN orders o
+ON c.customer_id = o.customer_id
+JOIN order_items oi
+ON o.order_id = oi.order_id
+GROUP BY c.email_address
+HAVING number_of_products > 1
+ORDER BY c.email_address ASC;
+
+#------------------------------------------------------------------------
