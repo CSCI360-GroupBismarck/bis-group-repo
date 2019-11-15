@@ -405,47 +405,87 @@ ORDER BY c.email_address ASC;
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
 #-----------------------------------------------------Part 6; Exercise #1
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
-
+SELECT category_name
+FROM categories
+WHERE category_id IN(
+SELECT category_id 
+FROM products);
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #2
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
-
+SELECT product_name, list_price
+FROM products
+HAVING list_price > (
+SELECT AVG(list_price) 
+FROM products)
+ORDER BY list_price DESC;
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #3
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
-
+SELECT category_name
+FROM categories
+WHERE NOT EXISTS(
+SELECT * 
+FROM products 
+WHERE products.category_id = categories.category_id);
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #4
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
+#Inner Query
+SELECT c.email_address, oi.order_id, 
+(oi.item_price - oi.discount_amount) AS order_total
+FROM customers c JOIN orders o
+ON c.customer_id = o.customer_id
+JOIN order_items oi
+ON oi.order_id = o.order_id
+GROUP BY email_address, order_id;
 
+#Complete Query
+SELECT email_address, MAX(order_total)
+FROM (SELECT c.email_address, oi.order_id, 
+(oi.item_price - oi.discount_amount) AS order_total
+FROM customers c JOIN orders o
+ON c.customer_id = o.customer_id
+JOIN order_items oi
+ON oi.order_id = o.order_id
+GROUP BY email_address, order_id) as newTable
+GROUP BY email_address
+ORDER BY order_total DESC;
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #5
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
-
+SELECT product_name, discount_percent
+FROM products
+WHERE discount_percent IN(
+SELECT discount_percent
+FROM products
+GROUP BY discount_percent
+HAVING count(discount_percent) = 1)
+ORDER BY product_name;
 
 #------------------------------------------------------------------------
 
