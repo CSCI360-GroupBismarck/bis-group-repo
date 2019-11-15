@@ -1,3 +1,7 @@
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+#                                     Part 2                                      #
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 #-----------------------------------------------------Part 2; Exercise #1
 #submitted by: Laura
 #updated by:
@@ -36,17 +40,56 @@ SELECT product_name, list_price, date_added
 
 #------------------------------------------------------------------------
 
+#-----------------------------------------------------Part 2; Exercise #4
+#submitted by: 
+#updated by:
+#verified by: *needs review*
 
 
 
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 2; Exercise #5
+#submitted by: 
+#updated by:
+#verified by: *needs review*
 
 
 
-/*Part 3; Exercise #1
-1.	Write a SELECT statement that joins the Categories table to the Products table and returns these columns: 
-category_name, product_name, list_price.
-Sort the result set by the category_name column and then by the product_name column in ascending sequence.*/
+#------------------------------------------------------------------------
 
+#-----------------------------------------------------Part 2; Exercise #6
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 2; Exercise #7
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 2; Exercise #8
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+#                                     Part 3                                      #
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
+#-----------------------------------------------------Part 3; Exercise #1
 #submitted by: Jared
 #updated by:
 #verified by: *needs review*
@@ -58,11 +101,7 @@ ORDER BY c.category_name, p.product_name ASC;
 
 #------------------------------------------------------------------------
 
-/*Part 3; Exercise #2
-2.	Write a SELECT statement that joins the Customers table to the Addresses table and returns these columns: 
-first_name, last_name, line1, city, state, zip_code.
-Return one row for each address for the customer with an email address of allan.sherwood@yahoo.com.*/
-
+#-----------------------------------------------------Part 3; Exercise #2
 #submitted by: Jared
 #updated by:
 #verified by: *needs review*
@@ -74,20 +113,206 @@ WHERE email_address = "allan.sherwood@yahoo.com";
 
 #------------------------------------------------------------------------
 
+#-----------------------------------------------------Part 3; Exercise #3
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
+FROM customers c JOIN addresses a 
+ON c.customer_id = a.customer_id
+WHERE c.shipping_address_id = a.address_id;
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 3; Exercise #4
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.last_name, c.first_name, o.order_date, p.product_name, oi.item_price, oi.discount_amount, oi.quantity
+FROM customers c JOIN orders o 
+ON c.customer_id = o.customer_id
+JOIN order_items oi 
+ON o.order_id = oi.order_id
+JOIN products p 
+ON oi.product_id = p.product_id
+ORDER BY c.last_name, o.order_date, p.product_name;
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 3; Exercise #5
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT a.product_name, a.list_price
+FROM products a JOIN products b
+ON a.list_price = b.list_price
+WHERE NOT a.product_code = b.product_code AND a.list_price = b.list_price
+ORDER BY a.product_name;
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 3; Exercise #6
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.category_name, p.product_id
+FROM categories c LEFT JOIN products p
+ON c.category_id = p.category_id
+WHERE product_id IS NULL;
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 3; Exercise #7
+#submitted by: 
+#updated by:
+#verified by: *needs review*
 
 
 
+#------------------------------------------------------------------------
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+#                                     Part 4                                      #
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
+#-----------------------------------------------------Part 4; Exercise #1
+#submitted by: 
+#updated by:
+#verified by: *needs review*
 
 
 
-/*Part 5; Exercise #4
-4.	Write a SELECT statement that returns one row for each customer that has orders with these columns:
-The email_address column from the Customers table
-A count of the number of orders
-The total amount for each order (Hint: First, subtract the discount amount from the price. Then, multiply by the quantity.)
-Return only those rows where the customer has more than 1 order.
-Sort the result set in descending sequence by the sum of the line item amounts.*/
+#------------------------------------------------------------------------
 
+#-----------------------------------------------------Part 4; Exercise #2
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 4; Exercise #3
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 4; Exercise #4
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 4; Exercise #5
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 4; Exercise #6
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 4; Exercise #7
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 4; Exercise #8
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 4; Exercise #9
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 4; Exercise #10
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+#                                     Part 5                                      #
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
+#-----------------------------------------------------Part 5; Exercise #1
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 5; Exercise #2
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.category_name, count(p.product_id), max(p.list_price)
+FROM categories c JOIN products p
+ON c.category_id = p.category_id
+GROUP BY c.category_name
+ORDER BY count(p.product_id) DESC;
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 5; Exercise #3
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT c.email_address, 
+(sum(oi.item_price) * oi.quantity) AS total_price, 
+(sum(oi.discount_amount) * oi.quantity) AS total_discount
+FROM customers c JOIN orders o
+ON c.customer_id = o.customer_id
+JOIN order_items oi
+ON o.order_id = oi.order_id
+GROUP BY o.customer_id
+ORDER BY total_price DESC;
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 5; Exercise #4
 #submitted by: Jared
 #updated by:
 #verified by: *needs review*
@@ -105,10 +330,7 @@ ORDER BY total_amount DESC;
 
 #------------------------------------------------------------------------
 
-/*Part 5; Exercise #5
-5.	Modify the solution to exercise 4 so it only counts and totals line items that have an 
-item_price value that’s greater than 400.*/
-
+#-----------------------------------------------------Part 5; Exercise #5
 #submitted by: Jared
 #updated by:
 #verified by: *needs review*
@@ -126,13 +348,16 @@ ORDER BY total_amount DESC;
 
 #------------------------------------------------------------------------
 
-/*Part 5; Exercise #7
-7.	Write a SELECT statement that answers this question: Which customers have ordered more than one product? 
-Return these columns:
-The email_address column from the Customers table
-The count of distinct products from the customer’s orders
-Sort the result set in ascending sequence by the email_address column.*/
+#-----------------------------------------------------Part 5; Exercise #6
+#submitted by: 
+#updated by:
+#verified by: *needs review*
 
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 5; Exercise #7
 #submitted by: Jared
 #updated by:
 #verified by: *needs review*
@@ -145,5 +370,90 @@ ON o.order_id = oi.order_id
 GROUP BY c.email_address
 HAVING number_of_products > 1
 ORDER BY c.email_address ASC;
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 5; Exercise #9
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 5; Exercise #10
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 5; Exercise #11
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+#                                     Part 6                                      #
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
+#-----------------------------------------------------Part 6; Exercise #1
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 6; Exercise #2
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 6; Exercise #3
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 6; Exercise #4
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 6; Exercise #5
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 6; Exercise #6
+#submitted by: 
+#updated by:
+#verified by: *needs review*
+
+
 
 #------------------------------------------------------------------------
