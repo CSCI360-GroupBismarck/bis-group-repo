@@ -4,15 +4,15 @@
 
 #-----------------------------------------------------Part 2; Exercise #1
 #submitted by: Laura
-#updated by:
-#verified by: *needs review*
+#updated by:Jared
+#verified by: Jared
 
 SELECT product_code, product_name, list_price, discount_percent
   FROM products;
   
 SELECT product_code, product_name, list_price, discount_percent
   FROM products
- ORDER BY list_price;  
+ ORDER BY list_price DESC;  
  
 #------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ SELECT CONCAT(last_name, ', ', first_name) AS full_name
 #-----------------------------------------------------Part 2; Exercise #3
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared
 
 SELECT product_name, list_price, date_added
   FROM products
@@ -68,20 +68,23 @@ SELECT product_name, list_price, date_added
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 2; Exercise #7
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
-
+SELECT now() AS today_unformatted, 
+date_format(now(), "%d-%b-%Y") AS today_formatted;
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 2; Exercise #8
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
-
+SELECT 100 AS price, .07 AS tax_rate, 
+(100 * .07) AS tax_amount, 
+(100 + (100 * .07)) AS total;
 
 #------------------------------------------------------------------------
 
@@ -349,11 +352,15 @@ ORDER BY total_amount DESC;
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #6
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
-
+SELECT p.product_name, 
+SUM((oi.item_price - oi.discount_amount) * oi.quantity) AS total_amount
+FROM products p JOIN order_items oi
+ON p.product_id = oi.product_id
+GROUP BY p.product_name WITH ROLLUP;
 
 #------------------------------------------------------------------------
 
@@ -370,6 +377,22 @@ ON o.order_id = oi.order_id
 GROUP BY c.email_address
 HAVING number_of_products > 1
 ORDER BY c.email_address ASC;
+
+#------------------------------------------------------------------------
+
+#-----------------------------------------------------Part 5; Exercise #8
+#submitted by: Jared
+#updated by:
+#verified by: *needs review*
+
+SELECT IF(GROUPING(c.category_name) = 1, "All Category Names", c.category_name) as category_name, 
+IF(GROUPING(p.product_name) = 1, "All Product Names", p.product_name) as product_name,
+sum(oi.quantity) AS total_quantity
+FROM categories c JOIN products p
+ON c.category_id = p.category_id
+JOIN order_items oi
+ON p.product_id = oi.product_id
+GROUP BY c.category_name, p.product_name WITH ROLLUP;
 
 #------------------------------------------------------------------------
 
@@ -490,10 +513,18 @@ ORDER BY product_name;
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #6
-#submitted by: 
+#submitted by: Jared
 #updated by:
 #verified by: *needs review*
 
-
+SELECT c.email_address, o.order_id, o.order_date
+FROM customers c JOIN orders o
+ON c.customer_id = o.customer_id
+WHERE o.order_date = (
+SELECT MIN(order_date) 
+FROM orders 
+WHERE order_date = o.order_date)
+GROUP BY c.customer_id
+ORDER BY o.order_date, o.order_id;
 
 #------------------------------------------------------------------------
