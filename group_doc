@@ -248,10 +248,13 @@ WHERE category_id = 5;
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #3
-#submitted by: 
+#submitted by: Laura
 #updated by:
 #verified by: *needs review*
 
+INSERT INTO products (product_id, category_id, product_code, product_name, description, list_price, discount_percent, date_added)
+VALUES (NULL, 4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano', 'Long description to come.', 799.99, 0, NOW() );
+ 
 
 #------------------------------------------------------------------------
 
@@ -266,20 +269,23 @@ VALUES (NULL, 4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano', 'Long descrip
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #5
-#submitted by: 
+#submitted by: Laura
 #updated by:
 #verified by: *needs review*
 
-
+UPDATE products
+   SET discount_percent = 35
+ WHERE product_id = 11;
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #6
-#submitted by: 
+#submitted by: Laura
 #updated by:
 #verified by: *needs review*
 
-
+DELETE FROM products WHERE category_id = 4;
+DELETE FROM categories WHERE category_id = 4;
 
 #------------------------------------------------------------------------
 
@@ -320,7 +326,7 @@ UPDATE customers
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #10
-#submitted by:
+#submitted by: Laura
 #updated by:
 #verified by: *needs review*
 
@@ -358,7 +364,7 @@ ORDER BY count(p.product_id) DESC;
 #-----------------------------------------------------Part 5; Exercise #3
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura - just small format difference; see below
 
 SELECT c.email_address, 
 (sum(oi.item_price) * oi.quantity) AS total_price, 
@@ -370,12 +376,23 @@ ON o.order_id = oi.order_id
 GROUP BY o.customer_id
 ORDER BY total_price DESC;
 
+SELECT c.email_address
+     , SUM(oi.item_price) * oi.quantity      AS item_price_total
+     , SUM(oi.discount_amount) * oi.quantity AS item_discount_total
+  FROM customers c
+  JOIN orders o
+    ON o.customer_id = c.customer_id
+  JOIN order_items oi
+    ON oi.order_id = o.order_id
+ GROUP BY c.customer_id
+ ORDER BY item_price_total DESC; 
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #4
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura -- just small format differences, see below
 
 SELECT c.email_address, 
 count(o.order_id) AS number_of_orders, 
@@ -388,12 +405,33 @@ GROUP BY o.customer_id
 HAVING count(o.order_id) > 1
 ORDER BY total_amount DESC;
 
+SELECT c.email_address
+     , COUNT(o.order_id)   AS count_of_orders
+     , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_order_amount
+  FROM customers c
+  JOIN orders o
+    ON o.customer_id = c.customer_id
+  JOIN order_items oi
+    ON oi.order_id = o.order_id
+ GROUP BY c.customer_id    
+HAVING COUNT(o.order_id) > 1
+ ORDER BY total_order_amount DESC; 
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #5
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura -- our answers show very different results, I have a line for customers with more than one order
+
+/*4.	
+Write a SELECT statement that returns one row for each customer that has orders with these columns:
+The email_address column from the Customers table
+A count of the number of orders
+The total amount for each order (Hint: First, subtract the discount amount from the price. Then, multiply by the quantity.)
+Return only those rows where the customer has more than 1 order.
+Sort the result set in descending sequence by the sum of the line item amounts.
+*/
 
 SELECT c.email_address, 
 count(o.order_id) AS number_of_orders, 
@@ -406,12 +444,25 @@ where oi.item_price > 400
 GROUP BY o.customer_id
 ORDER BY total_amount DESC;
 
+SELECT c.email_address
+     , COUNT(o.order_id)   AS count_of_orders
+     , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_order_amount
+  FROM customers c
+  JOIN orders o
+    ON o.customer_id = c.customer_id
+  JOIN order_items oi
+    ON oi.order_id = o.order_id
+   AND oi.item_price > 400
+ GROUP BY c.customer_id    
+HAVING COUNT(o.order_id) > 1
+ ORDER BY total_order_amount DESC;  
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #6
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura
 
 SELECT p.product_name, 
 SUM((oi.item_price - oi.discount_amount) * oi.quantity) AS total_amount
@@ -419,12 +470,19 @@ FROM products p JOIN order_items oi
 ON p.product_id = oi.product_id
 GROUP BY p.product_name WITH ROLLUP;
 
+SELECT p.product_name
+     , SUM(((oi.item_price - oi.discount_amount)) * oi.quantity)  AS total_order_amount
+  FROM products p
+  JOIN order_items oi
+    ON oi.product_id = p.product_id
+ GROUP BY p.product_name WITH ROLLUP; 
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #7
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura
 
 SELECT c.email_address, count(oi.order_id) AS number_of_products
 FROM customers c JOIN orders o
@@ -435,12 +493,24 @@ GROUP BY c.email_address
 HAVING number_of_products > 1
 ORDER BY c.email_address ASC;
 
+ SELECT c.email_address
+      , COUNT(oi.product_id)  AS distinct_products
+   FROM customers c
+   JOIN orderS o
+     ON o.customer_id = c.customer_id
+   JOIN order_items oi
+     ON oi.order_id = o.order_id
+  GROUP BY c.email_address
+  HAVING distinct_products > 1
+  ORDER BY c.email_address ASC;
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #8
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura --on this one we will need to decide on the verbiage that comes out of the IF/GROUPING statements
+#                     we are also off on our totals, somehow mine brings back 2 Gibson Les Paul and yours brings back 3
 
 SELECT IF(GROUPING(c.category_name) = 1, "All Category Names", c.category_name) as category_name, 
 IF(GROUPING(p.product_name) = 1, "All Product Names", p.product_name) as product_name,
@@ -450,6 +520,18 @@ ON c.category_id = p.category_id
 JOIN order_items oi
 ON p.product_id = oi.product_id
 GROUP BY c.category_name, p.product_name WITH ROLLUP;
+
+SELECT IF(GROUPING(c.category_name) = 1,'GRAND TOTAL', c.category_name)  AS category_name
+     , IF(GROUPING(p.product_name) = 1, 'SUMMARY ROW', p.product_name)   AS product_name
+     , COUNT(oi.product_id)  AS product_quantity
+  FROM products p
+  JOIN categories c
+    ON c.category_id = p.category_id
+  JOIN order_items oi
+    ON oi.product_id = p.product_id
+  JOIN orders o
+    ON o.order_id = oi.order_id
+ GROUP BY c.category_name, p.product_name WITH ROLLUP;
 
 #------------------------------------------------------------------------
 
