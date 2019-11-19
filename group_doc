@@ -534,29 +534,42 @@ SELECT IF(GROUPING(c.category_name) = 1,'GRAND TOTAL', c.category_name)  AS cate
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #9
-#submitted by: 
+#submitted by: Laura
 #updated by:
 #verified by: *needs review*
 
-
+SELECT oi.order_id
+     , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_item_amount
+     , SUM(((oi.item_price - oi.discount_amount)) * oi.quantity) OVER (PARTITION BY oi.order_id) AS total_order_amount
+  FROM order_items oi;
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #10
-#submitted by: 
+#submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: *needs review* --very confused about what this one is asking for
 
-
+SELECT oi.order_id
+     , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_item_amount
+     , SUM(((oi.item_price - oi.discount_amount)) * oi.quantity) OVER (PARTITION BY oi.order_id) AS total_order_amount
+	 , ROUND(AVG(((oi.item_price - oi.discount_amount)) * oi.quantity) OVER (PARTITION BY oi.order_id),2) AS avg_item_amount     
+  FROM order_items oi;
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #11
-#submitted by: 
+#submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: *needs review*  --still working on this one, this is what I have so far.
 
-
+SELECT o.customer_id
+     , o.order_date
+     , SUM(((oi.item_price - oi.discount_amount)) * oi.quantity) OVER (PARTITION BY oi.item_id)  AS total_amount_order_item
+  FROM orders o
+  JOIN order_items oi
+    ON oi.order_id = o.order_id
+    #need joins to get to customers and research peer group;
 
 #------------------------------------------------------------------------
 
