@@ -43,7 +43,7 @@ SELECT product_name, list_price, date_added
 #-----------------------------------------------------Part 2; Exercise #4
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared
 
 SELECT product_name, list_price, discount_percent
      , ROUND(list_price * (discount_percent/100), 2)               AS discount_amount
@@ -56,7 +56,7 @@ SELECT product_name, list_price, discount_percent
 #-----------------------------------------------------Part 2; Exercise #5
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared
 
 SELECT item_id, item_price, discount_amount, quantity
      , item_price * quantity       AS price_total
@@ -71,7 +71,7 @@ SELECT item_id, item_price, discount_amount, quantity
 #-----------------------------------------------------Part 2; Exercise #6
 #submitted by:Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared
 
 SELECT order_id, order_date, ship_date
   FROM orders
@@ -123,6 +123,8 @@ ORDER BY c.category_name, p.product_name ASC;
 #verified by: Laura -- I added 'DISTINCT' because it specified return on row, I tested both and it doesn't
 #                      seem to make a difference in this data set, but should we include it anyway?
 #                      also, could add alias to email field, not necessary I know, but for clarity in reading
+#             Jared -- I believe your approach is more accurate than mine. Good catch!
+
 
 SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
 FROM customers c JOIN addresses a 
@@ -141,6 +143,10 @@ WHERE email_address = "allan.sherwood@yahoo.com";
 #submitted by: Jared
 #updated by:
 #verified by: Laura --I added 'DISTINCT' here as well, for the same reason as above. see logic below. thoughts?
+#             Jared -- The only thing that I could see causing issues with DISTINCT is if there
+#                      was more than one order (from different individuals) from the same address.
+#                      They would both have the same shipping/billing addresses and I don't think
+#                      it would display both orders?
 
 SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
 FROM customers c JOIN addresses a 
@@ -207,7 +213,7 @@ WHERE product_id IS NULL;
 #-----------------------------------------------------Part 3; Exercise #7
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared - I was drawing a blank on this one. Your implementation makes a lot sense!
 
 SELECT 'SHIPPED' AS ship_status
      , order_id
@@ -230,26 +236,36 @@ SELECT 'SHIPPED' AS ship_status
 #-----------------------------------------------------Part 4; Exercise #1
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared - Similar output, different implementation. Interesting how NULL still populates category_id!
 
 INSERT INTO categories VALUES (NULL, 'Brass');
+
+#Jared
+INSERT INTO categories
+VALUES(DEFAULT, "Brass");
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #2
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared - Very similar. I opted for category_name > 4 since I added/deleted Woodwinds several times
+#                     and the category_id would always increment regardless of what was currently populated.
 
 UPDATE categories
   SET category_name = 'Woodwinds'
 WHERE category_id = 5;
 
+#Jared
+UPDATE categories
+SET category_name = "Woodwinds"
+WHERE category_id > 4;
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #3
 #submitted by: Laura
-#updated by:
+#updated by: Jared - The wrong answer is pasted here. Please update :)
 #verified by: *needs review*
 
 INSERT INTO products (product_id, category_id, product_code, product_name, description, list_price, discount_percent, date_added)
@@ -261,28 +277,37 @@ VALUES (NULL, 4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano', 'Long descrip
 #-----------------------------------------------------Part 4; Exercise #4
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared - Again with the NULL/DEFAULT different. Very interesting!
 
 INSERT INTO products (product_id, category_id, product_code, product_name, description, list_price, discount_percent, date_added)
 VALUES (NULL, 4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano', 'Long description to come.', 799.99, 0, NOW() );
+
+#Jared
+INSERT INTO products(product_id, category_id, product_code, product_name, description, list_price, discount_percent, date_added)
+VALUES(DEFAULT, 4, "dgx_640", "Yamaha DGX 640 88-Key Digital Piano", "Long description to come.", 799.99, 0, now());
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #5
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared - Used product_id > 10 for similar reasons as stated above. Yours is definitely safer.
 
 UPDATE products
    SET discount_percent = 35
  WHERE product_id = 11;
+ 
+ #Jared
+UPDATE products
+SET discount_percent = 35
+WHERE product_id > 10;
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #6
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared
 
 DELETE FROM products WHERE category_id = 4;
 DELETE FROM categories WHERE category_id = 4;
@@ -292,21 +317,25 @@ DELETE FROM categories WHERE category_id = 4;
 #-----------------------------------------------------Part 4; Exercise #7
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared - Similar, but you don't actually need to add "NULL" if you don't specify customer_id column.
 
 /*
 is this email_address supposed to be 'rick@raven.com" rather than ric@raven.com?
 it seems that way based on exercise #8, but maybe that is part of the 'test'?
-*/
+Jared - I'm seeing rick@raven.com for both questions so I'm not sure?*/
 
 INSERT INTO customers (customer_id, email_address, password, first_name, last_name)
 VALUES (NULL, 'ric@raven.com', '', 'Rick', 'Raven');
+
+#Jared
+INSERT INTO customers(email_address, password, first_name, last_name)
+VALUES("rick@raven.com", "", "Rick", "Raven");
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #8
 #submitted by: Laura
-#updated by:
+#updated by: Jared - Looks like another erroneous paste. Please update this answer ;)
 #verified by: *needs review*
 
 INSERT INTO customers (customer_id, email_address, password, first_name, last_name)
@@ -317,7 +346,7 @@ VALUES (NULL, 'rick@raven.com', '', 'Rick', 'Raven');
 #-----------------------------------------------------Part 4; Exercise #9
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared
 
 UPDATE customers
    SET password = 'reset'
@@ -328,7 +357,7 @@ UPDATE customers
 #-----------------------------------------------------Part 4; Exercise #10
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared
 
 #re-run the entire create_my_guitar_shop.sql script to restore the data in the database
 
@@ -341,10 +370,14 @@ UPDATE customers
 #-----------------------------------------------------Part 5; Exercise #1
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared - Very similar. Yours is likely the preferable way to do it.
 
 SELECT count(*), sum(tax_amount)
   FROM orders;
+  
+#Jared
+SELECT count(order_id), sum(tax_amount)
+FROM orders;
 
 #------------------------------------------------------------------------
 
@@ -352,6 +385,7 @@ SELECT count(*), sum(tax_amount)
 #submitted by: Jared
 #updated by:
 #verified by: Laura --looks good, do we want to give the aggregated fields a title?
+#             Jared --We definitely can if you'd like. I agree that the functions are a bit ugly.
 
 SELECT c.category_name, count(p.product_id), max(p.list_price)
 FROM categories c JOIN products p
