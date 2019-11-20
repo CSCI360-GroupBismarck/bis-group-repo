@@ -580,7 +580,7 @@ SELECT o.customer_id
 #-----------------------------------------------------Part 6; Exercise #1
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura - I think this one needs an order by statement
 
 SELECT category_name
 FROM categories
@@ -588,12 +588,17 @@ WHERE category_id IN(
 SELECT category_id 
 FROM products);
 
+SELECT c.category_name
+  FROM categories c
+ WHERE c.category_id IN (SELECT DISTINCT p.category_id FROM products p)
+ ORDER BY c.category_name;
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #2
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura --we need to choose between the HAVING or WHERE clause; return same results
 
 SELECT product_name, list_price
 FROM products
@@ -602,12 +607,18 @@ SELECT AVG(list_price)
 FROM products)
 ORDER BY list_price DESC;
 
+SELECT p.product_name
+     , p.list_price
+  FROM products p
+ WHERE p.list_price > (SELECT AVG(list_price) FROM products)
+ ORDER BY p.list_price DESC; 
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #3
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura - slightly different approaches; same results
 
 SELECT category_name
 FROM categories
@@ -616,12 +627,19 @@ SELECT *
 FROM products 
 WHERE products.category_id = categories.category_id);
 
+SELECT c.category_name
+  FROM categories c
+ WHERE NOT EXISTS (SELECT 1
+                     FROM products p
+		    WHERE p.category_id = c.category_id);
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #4
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura -- different setups, basically same results. I think your final query might need a title/name
+#                      for the MAX(order_total) field and then ORDER BY that field
 
 #Inner Query
 SELECT c.email_address, oi.order_id, 
@@ -631,6 +649,17 @@ ON c.customer_id = o.customer_id
 JOIN order_items oi
 ON oi.order_id = o.order_id
 GROUP BY email_address, order_id;
+
+#Inner Query - laura
+SELECT c.email_address
+     , o.order_id
+     , ((oi.item_price - oi.discount_amount))  AS total_item_amount
+  FROM customers c
+  JOIN orders o
+    ON o.customer_id = c.customer_id
+  JOIN order_items oi
+    ON oi.order_id = o.order_id
+ GROUP BY c.email_address, o.order_id; 
 
 #Complete Query
 SELECT email_address, MAX(order_total)
@@ -644,12 +673,28 @@ GROUP BY email_address, order_id) as newTable
 GROUP BY email_address
 ORDER BY order_total DESC;
 
+#Complete Query - Laura
+SELECT z.email_address
+     , MAX(z.order_amount)  AS largest_order
+  FROM (
+SELECT c.email_address
+     , o.order_id
+     , ((oi.item_price - oi.discount_amount))  AS order_amount
+  FROM customers c
+  JOIN orders o
+    ON o.customer_id = c.customer_id
+  JOIN order_items oi
+    ON oi.order_id = o.order_id
+ GROUP BY c.email_address, o.order_id
+       ) z
+ GROUP BY z.email_address
+ ORDER BY largest_order DESC;
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #5
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura - different approaches; same results --we just need to pick one
 
 SELECT product_name, discount_percent
 FROM products
@@ -660,12 +705,21 @@ GROUP BY discount_percent
 HAVING count(discount_percent) = 1)
 ORDER BY product_name;
 
+SELECT p.product_name
+     , p.discount_percent
+  FROM products p
+ WHERE NOT EXISTS(SELECT 1
+                    FROM products p2
+	           WHERE p2.product_id <> p.product_id
+                     AND p2.discount_percent = p.discount_percent)
+ ORDER BY p.product_name;
+
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #6
 #submitted by: Jared
 #updated by:
-#verified by: *needs review*
+#verified by: Laura - different approach; same results
 
 SELECT c.email_address, o.order_id, o.order_date
 FROM customers c JOIN orders o
@@ -676,5 +730,16 @@ FROM orders
 WHERE order_date = o.order_date)
 GROUP BY c.customer_id
 ORDER BY o.order_date, o.order_id;
+
+SELECT c.email_address
+     , o.order_id
+     , o.order_date
+  FROM customers c
+  JOIN orders o
+    ON o.customer_id = c.customer_id
+ WHERE o.order_date = (SELECT MIN(o2.order_date)
+                         FROM orders o2
+	                WHERE o2.customer_id = c.customer_id)
+ ORDER BY o.order_date, o.order_id;
 
 #------------------------------------------------------------------------
