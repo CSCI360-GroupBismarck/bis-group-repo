@@ -162,7 +162,7 @@ SELECT c.last_name, c.first_name, o.order_date, p.product_name, oi.item_price, o
 #-----------------------------------------------------Part 3; Exercise #5
 #submitted by: Jared
 #updated by:
-#verified by: Lauraw
+#verified by: Laura
 
 SELECT a.product_name, a.list_price
 FROM products a JOIN products b
@@ -229,8 +229,8 @@ WHERE category_id = 5;
 
 #-----------------------------------------------------Part 4; Exercise #3
 #submitted by: Laura
-#updated by: Jared - The wrong answer is pasted here. Please update :) ##sorry about that!!!
-#verified by: *needs review*
+#updated by: Jared
+#verified by: Jared
 
 DELETE FROM categories WHERE category_id = 5;
  
@@ -239,8 +239,7 @@ DELETE FROM categories WHERE category_id = 5;
 #-----------------------------------------------------Part 4; Exercise #4
 #submitted by: Laura
 #updated by:
-#verified by: Jared - Again with the NULL/DEFAULT different. Very interesting!
-#                      I kept your DEFAULT version for this one and my NULL version for Part 4, exercise #1 above
+#verified by: Jared
 
 INSERT INTO products(product_id, category_id, product_code, product_name, description, list_price, discount_percent, date_added)
 VALUES(DEFAULT, 4, "dgx_640", "Yamaha DGX 640 88-Key Digital Piano", "Long description to come.", 799.99, 0, now());
@@ -280,8 +279,8 @@ VALUES ('rick@raven.com', '', 'Rick', 'Raven');
 
 #-----------------------------------------------------Part 4; Exercise #8
 #submitted by: Laura
-#updated by: Jared - Looks like another erroneous paste. Please update this answer ;)
-#verified by: *needs review*  #sorry again!
+#updated by: Jared
+#verified by: Jared
 
 UPDATE customers
    SET password = 'secret'
@@ -316,8 +315,7 @@ UPDATE customers
 #-----------------------------------------------------Part 5; Exercise #1
 #submitted by: Laura
 #updated by: Laura
-#verified by: Jared - Very similar. Yours is likely the preferable way to do it. 
-#                     I kept your version because the intent is clear.
+#verified by: Jared
 
 SELECT count(order_id), sum(tax_amount)
 FROM orders;
@@ -326,10 +324,8 @@ FROM orders;
 
 #-----------------------------------------------------Part 5; Exercise #2
 #submitted by: Jared
-#updated by:
-#verified by: Laura --looks good, do we want to give the aggregated fields a title?
-#             Jared --We definitely can if you'd like. I agree that the functions are a bit ugly.
-#             Laura - I added tites to the fields but I am not sure it is better...feel free to remove.
+#updated by: Laura
+#verified by: Laura
 
 SELECT c.category_name
      , count(p.product_id) AS product_count
@@ -337,7 +333,7 @@ SELECT c.category_name
 FROM categories c JOIN products p
 ON c.category_id = p.category_id
 GROUP BY c.category_name
-ORDER BY count(p.product_id) DESC;
+ORDER BY product_count DESC;
 
 #------------------------------------------------------------------------
 
@@ -378,22 +374,10 @@ ORDER BY total_amount DESC;
 
 #-----------------------------------------------------Part 5; Exercise #5
 #submitted by: Jared
-#updated by:
-#verified by: Laura -- our answers show very different results, I have a line for customers with more than one order
-#             Jared -- Your code is correct. It looks like I didn't finish the code and failed to comment it so that
-#                      I would know to come back and finish it. My apologies!
-#             Laura - now that I revist this...I am wondering if 'Modify the solution to exercise 4' means take out the clause
-#                     that limits results to customers with more than one order and REPLACE it with logic for item_price > 400
-#                     thoughts?
-/*4.	
-Write a SELECT statement that returns one row for each customer that has orders with these columns:
-The email_address column from the Customers table
-A count of the number of orders
-The total amount for each order (Hint: First, subtract the discount amount from the price. Then, multiply by the quantity.)
-Return only those rows where the customer has more than 1 order.
-Sort the result set in descending sequence by the sum of the line item amounts.
-*/
+#updated by: Laura
+#verified by: Laura
 
+#Displaying all orders with item_price value greater than $400
 SELECT c.email_address, 
 count(o.order_id) AS number_of_orders, 
 ((oi.item_price - oi.discount_amount) * oi.quantity) AS total_amount
@@ -405,6 +389,7 @@ where oi.item_price > 400
 GROUP BY o.customer_id
 ORDER BY total_amount DESC;
 
+#Displaying only multiple orders with item_price values greater than $400
 SELECT c.email_address
      , COUNT(o.order_id)   AS count_of_orders
      , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_order_amount
@@ -429,14 +414,7 @@ SELECT p.product_name,
 SUM((oi.item_price - oi.discount_amount) * oi.quantity) AS total_amount
 FROM products p JOIN order_items oi
 ON p.product_id = oi.product_id
-GROUP BY p.product_name WITH ROLLUP;
-
-SELECT p.product_name
-     , SUM(((oi.item_price - oi.discount_amount)) * oi.quantity)  AS total_order_amount
-  FROM products p
-  JOIN order_items oi
-    ON oi.product_id = p.product_id
- GROUP BY p.product_name WITH ROLLUP; 
+GROUP BY p.product_name WITH ROLLUP; 
 
 #------------------------------------------------------------------------
 
@@ -454,24 +432,12 @@ GROUP BY c.email_address
 HAVING number_of_products > 1
 ORDER BY c.email_address ASC;
 
- SELECT c.email_address
-      , COUNT(oi.product_id)  AS distinct_products
-   FROM customers c
-   JOIN orderS o
-     ON o.customer_id = c.customer_id
-   JOIN order_items oi
-     ON oi.order_id = o.order_id
-  GROUP BY c.email_address
-  HAVING distinct_products > 1
-  ORDER BY c.email_address ASC;
-
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #8
 #submitted by: Jared
 #updated by:
-#verified by: Laura -- I had COUNT(oi.product_id) for total_quantity where you have SUM(oi.quantity)
-#                      Not sure what I was thinking or why I couldn't see that was the difference in our logic. nice work!
+#verified by: Laura
 
 SELECT IF(GROUPING(c.category_name) = 1,'GRAND TOTAL', c.category_name)  AS category_name
      , IF(GROUPING(p.product_name) = 1, 'SUMMARY ROW', p.product_name)   AS product_name
@@ -515,9 +481,7 @@ SELECT oi.order_id
 #-----------------------------------------------------Part 5; Exercise #11
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*  --still working on this one, this is what I have so far.
-#                       Jared --I suppose we'll be using the answer given in class?
-#                       Laura - yes, his explanation helped a lot on this one!
+#verified by: Jared
 
 SELECT o.customer_id
      , o.order_date
