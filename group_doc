@@ -457,6 +457,8 @@ HAVING COUNT(o.order_id) > 1
 #submitted by: Jared
 #updated by:
 #verified by: Laura -- our answers show very different results, I have a line for customers with more than one order
+#             Jared -- Your code is correct. It looks like I didn't finish the code and failed to comment it so that
+#                      I would know to come back and finish it. My apologies!
 
 /*4.	
 Write a SELECT statement that returns one row for each customer that has orders with these columns:
@@ -545,6 +547,9 @@ ORDER BY c.email_address ASC;
 #updated by:
 #verified by: Laura --on this one we will need to decide on the verbiage that comes out of the IF/GROUPING statements
 #                     we are also off on our totals, somehow mine brings back 2 Gibson Les Paul and yours brings back 3
+#             Jared --I believe the 3rd Gibson Les Paul comes from Order_Items table, order_id 4. Notice that the order
+#                     quantity is 2 and not just 1. As for the verbage of the IF/GROUPING statements, I believe that
+#                     your choice of verbiage is definitely a better choice.
 
 SELECT IF(GROUPING(c.category_name) = 1, "All Category Names", c.category_name) as category_name, 
 IF(GROUPING(p.product_name) = 1, "All Product Names", p.product_name) as product_name,
@@ -570,7 +575,8 @@ SELECT IF(GROUPING(c.category_name) = 1,'GRAND TOTAL', c.category_name)  AS cate
 #-----------------------------------------------------Part 5; Exercise #9
 #submitted by: Laura
 #updated by:
-#verified by: *needs review*
+#verified by: Jared - Very impressed! I didn't figure this one out. Missing an ORDER BY statement according to
+#                     the answer provided in class.
 
 SELECT oi.order_id
      , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_item_amount
@@ -583,6 +589,7 @@ SELECT oi.order_id
 #submitted by: Laura
 #updated by:
 #verified by: *needs review* --very confused about what this one is asking for
+#                       Jared --Very impressed again! I think it's only missing the ORDER BY statement again.
 
 SELECT oi.order_id
      , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_item_amount
@@ -596,6 +603,7 @@ SELECT oi.order_id
 #submitted by: Laura
 #updated by:
 #verified by: *needs review*  --still working on this one, this is what I have so far.
+#                       Jared --I suppose we'll be using the answer given in class?
 
 SELECT o.customer_id
      , o.order_date
@@ -615,12 +623,14 @@ SELECT o.customer_id
 #submitted by: Jared
 #updated by:
 #verified by: Laura - I think this one needs an order by statement
+#             Jared - You're 100% correct. Good catch! I updated my code.
 
 SELECT category_name
 FROM categories
 WHERE category_id IN(
 SELECT category_id 
-FROM products);
+FROM products)
+ORDER BY category_name;
 
 SELECT c.category_name
   FROM categories c
@@ -633,6 +643,7 @@ SELECT c.category_name
 #submitted by: Jared
 #updated by:
 #verified by: Laura --we need to choose between the HAVING or WHERE clause; return same results
+#             Jared --I prefer WHERE. Can't remember why I chose HAVING at this point.
 
 SELECT product_name, list_price
 FROM products
@@ -653,6 +664,8 @@ SELECT p.product_name
 #submitted by: Jared
 #updated by:
 #verified by: Laura - slightly different approaches; same results
+#             Jared - They both look good to me.
+
 
 SELECT category_name
 FROM categories
@@ -674,6 +687,8 @@ SELECT c.category_name
 #updated by:
 #verified by: Laura -- different setups, basically same results. I think your final query might need a title/name
 #                      for the MAX(order_total) field and then ORDER BY that field
+#             Jared -- You're 100% correct. I have updated my "complete query" (didn't add the alias, though) and
+#                      it now works identically to yours. Good catch!
 
 #Inner Query
 SELECT c.email_address, oi.order_id, 
@@ -705,7 +720,7 @@ JOIN order_items oi
 ON oi.order_id = o.order_id
 GROUP BY email_address, order_id) as newTable
 GROUP BY email_address
-ORDER BY order_total DESC;
+ORDER BY MAX(order_total) DESC;
 
 #Complete Query - Laura
 SELECT z.email_address
@@ -729,6 +744,8 @@ SELECT c.email_address
 #submitted by: Jared
 #updated by:
 #verified by: Laura - different approaches; same results --we just need to pick one
+#             Jared - Very interesting implementation! Both options are solid so I'll defer to your
+#                     preference. If you don't have a preference, then we can just default to mine.
 
 SELECT product_name, discount_percent
 FROM products
@@ -754,6 +771,7 @@ SELECT p.product_name
 #submitted by: Jared
 #updated by:
 #verified by: Laura - different approach; same results
+#             Jared - I feel like your approach is more efficient.
 
 SELECT c.email_address, o.order_id, o.order_date
 FROM customers c JOIN orders o
