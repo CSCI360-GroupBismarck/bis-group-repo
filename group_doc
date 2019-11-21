@@ -30,12 +30,12 @@ SELECT CONCAT(last_name, ', ', first_name) AS full_name
 
 #-----------------------------------------------------Part 2; Exercise #3
 #submitted by: Laura
-#updated by:
+#updated by: Laura
 #verified by: Jared
 
-SELECT product_name, list_price, date_added
+ SELECT product_name, list_price, date_added
   FROM products
- WHERE list_price BETWEEN 500 AND 2000
+ WHERE list_price > 500 AND list_price < 2000
  ORDER BY date_added DESC;
 
 #------------------------------------------------------------------------
@@ -119,17 +119,8 @@ ORDER BY c.category_name, p.product_name ASC;
 
 #-----------------------------------------------------Part 3; Exercise #2
 #submitted by: Jared
-#updated by:
-#verified by: Laura -- I added 'DISTINCT' because it specified return on row, I tested both and it doesn't
-#                      seem to make a difference in this data set, but should we include it anyway?
-#                      also, could add alias to email field, not necessary I know, but for clarity in reading
-#             Jared -- I believe your approach is more accurate than mine. Good catch!
-
-
-SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
-FROM customers c JOIN addresses a 
-ON c.customer_id = a.customer_id
-WHERE email_address = "allan.sherwood@yahoo.com";
+#updated by: Laura
+#verified by: Laura 
 
  SELECT DISTINCT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
    FROM customers c
@@ -142,22 +133,12 @@ WHERE email_address = "allan.sherwood@yahoo.com";
 #-----------------------------------------------------Part 3; Exercise #3
 #submitted by: Jared
 #updated by:
-#verified by: Laura --I added 'DISTINCT' here as well, for the same reason as above. see logic below. thoughts?
-#             Jared -- The only thing that I could see causing issues with DISTINCT is if there
-#                      was more than one order (from different individuals) from the same address.
-#                      They would both have the same shipping/billing addresses and I don't think
-#                      it would display both orders?
+#verified by: Laura 
 
 SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
 FROM customers c JOIN addresses a 
 ON c.customer_id = a.customer_id
 WHERE c.shipping_address_id = a.address_id;
-
-SELECT DISTINCT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
-  FROM customers c
-  JOIN addresses a
-    ON a.customer_id = c.customer_id
- WHERE c.shipping_address_id = c.billing_address_id;
 
 #------------------------------------------------------------------------
 
@@ -181,20 +162,13 @@ SELECT c.last_name, c.first_name, o.order_date, p.product_name, oi.item_price, o
 #-----------------------------------------------------Part 3; Exercise #5
 #submitted by: Jared
 #updated by:
-#verified by: Laura -- different approach, same results. see below
+#verified by: Lauraw
 
 SELECT a.product_name, a.list_price
 FROM products a JOIN products b
 ON a.list_price = b.list_price
 WHERE NOT a.product_code = b.product_code AND a.list_price = b.list_price
 ORDER BY a.product_name;
-
-SELECT p.product_name, p.list_price 
-  FROM products p
-  JOIN products p2
-    ON p.product_id <> p2.product_id 
-   AND p.list_price = p2.list_price
- ORDER BY p.product_name; 
 
 #------------------------------------------------------------------------
 
@@ -213,7 +187,7 @@ WHERE product_id IS NULL;
 #-----------------------------------------------------Part 3; Exercise #7
 #submitted by: Laura
 #updated by:
-#verified by: Jared - I was drawing a blank on this one. Your implementation makes a lot sense!
+#verified by: Jared
 
 SELECT 'SHIPPED' AS ship_status
      , order_id
@@ -236,53 +210,38 @@ SELECT 'SHIPPED' AS ship_status
 #-----------------------------------------------------Part 4; Exercise #1
 #submitted by: Laura
 #updated by:
-#verified by: Jared - Similar output, different implementation. Interesting how NULL still populates category_id!
+#verified by: Jared           
 
 INSERT INTO categories VALUES (NULL, 'Brass');
-
-#Jared
-INSERT INTO categories
-VALUES(DEFAULT, "Brass");
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #2
 #submitted by: Laura
 #updated by:
-#verified by: Jared - Very similar. I opted for category_name > 4 since I added/deleted Woodwinds several times
-#                     and the category_id would always increment regardless of what was currently populated.
+#verified by: Jared
 
 UPDATE categories
   SET category_name = 'Woodwinds'
 WHERE category_id = 5;
 
-#Jared
-UPDATE categories
-SET category_name = "Woodwinds"
-WHERE category_id > 4;
-
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #3
 #submitted by: Laura
-#updated by: Jared - The wrong answer is pasted here. Please update :)
+#updated by: Jared - The wrong answer is pasted here. Please update :) ##sorry about that!!!
 #verified by: *needs review*
 
-INSERT INTO products (product_id, category_id, product_code, product_name, description, list_price, discount_percent, date_added)
-VALUES (NULL, 4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano', 'Long description to come.', 799.99, 0, NOW() );
+DELETE FROM categories WHERE category_id = 5;
  
-
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #4
 #submitted by: Laura
 #updated by:
 #verified by: Jared - Again with the NULL/DEFAULT different. Very interesting!
+#                      I kept your DEFAULT version for this one and my NULL version for Part 4, exercise #1 above
 
-INSERT INTO products (product_id, category_id, product_code, product_name, description, list_price, discount_percent, date_added)
-VALUES (NULL, 4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano', 'Long description to come.', 799.99, 0, NOW() );
-
-#Jared
 INSERT INTO products(product_id, category_id, product_code, product_name, description, list_price, discount_percent, date_added)
 VALUES(DEFAULT, 4, "dgx_640", "Yamaha DGX 640 88-Key Digital Piano", "Long description to come.", 799.99, 0, now());
 
@@ -291,16 +250,11 @@ VALUES(DEFAULT, 4, "dgx_640", "Yamaha DGX 640 88-Key Digital Piano", "Long descr
 #-----------------------------------------------------Part 4; Exercise #5
 #submitted by: Laura
 #updated by:
-#verified by: Jared - Used product_id > 10 for similar reasons as stated above. Yours is definitely safer.
+#verified by: Jared
 
 UPDATE products
    SET discount_percent = 35
  WHERE product_id = 11;
- 
- #Jared
-UPDATE products
-SET discount_percent = 35
-WHERE product_id > 10;
 
 #------------------------------------------------------------------------
 
@@ -316,30 +270,22 @@ DELETE FROM categories WHERE category_id = 4;
 
 #-----------------------------------------------------Part 4; Exercise #7
 #submitted by: Laura
-#updated by:
-#verified by: Jared - Similar, but you don't actually need to add "NULL" if you don't specify customer_id column.
+#updated by: Laura
+#verified by: Jared
 
-/*
-is this email_address supposed to be 'rick@raven.com" rather than ric@raven.com?
-it seems that way based on exercise #8, but maybe that is part of the 'test'?
-Jared - I'm seeing rick@raven.com for both questions so I'm not sure?*/
-
-INSERT INTO customers (customer_id, email_address, password, first_name, last_name)
-VALUES (NULL, 'ric@raven.com', '', 'Rick', 'Raven');
-
-#Jared
 INSERT INTO customers(email_address, password, first_name, last_name)
-VALUES("rick@raven.com", "", "Rick", "Raven");
+VALUES ('rick@raven.com', '', 'Rick', 'Raven');
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 4; Exercise #8
 #submitted by: Laura
 #updated by: Jared - Looks like another erroneous paste. Please update this answer ;)
-#verified by: *needs review*
+#verified by: *needs review*  #sorry again!
 
-INSERT INTO customers (customer_id, email_address, password, first_name, last_name)
-VALUES (NULL, 'rick@raven.com', '', 'Rick', 'Raven');
+UPDATE customers
+   SET password = 'secret'
+ WHERE email_address = 'rick@raven.com';
 
 #------------------------------------------------------------------------
 
@@ -369,13 +315,10 @@ UPDATE customers
 
 #-----------------------------------------------------Part 5; Exercise #1
 #submitted by: Laura
-#updated by:
-#verified by: Jared - Very similar. Yours is likely the preferable way to do it.
+#updated by: Laura
+#verified by: Jared - Very similar. Yours is likely the preferable way to do it. 
+#                     I kept your version because the intent is clear.
 
-SELECT count(*), sum(tax_amount)
-  FROM orders;
-  
-#Jared
 SELECT count(order_id), sum(tax_amount)
 FROM orders;
 
@@ -386,8 +329,11 @@ FROM orders;
 #updated by:
 #verified by: Laura --looks good, do we want to give the aggregated fields a title?
 #             Jared --We definitely can if you'd like. I agree that the functions are a bit ugly.
+#             Laura - I added tites to the fields but I am not sure it is better...feel free to remove.
 
-SELECT c.category_name, count(p.product_id), max(p.list_price)
+SELECT c.category_name
+     , count(p.product_id) AS product_count
+     , max(p.list_price)   AS highest_list_price
 FROM categories c JOIN products p
 ON c.category_id = p.category_id
 GROUP BY c.category_name
@@ -398,7 +344,7 @@ ORDER BY count(p.product_id) DESC;
 #-----------------------------------------------------Part 5; Exercise #3
 #submitted by: Jared
 #updated by:
-#verified by: Laura - just small format difference; see below
+#verified by: Laura
 
 SELECT c.email_address, 
 (sum(oi.item_price) * oi.quantity) AS total_price, 
@@ -410,23 +356,12 @@ ON o.order_id = oi.order_id
 GROUP BY o.customer_id
 ORDER BY total_price DESC;
 
-SELECT c.email_address
-     , SUM(oi.item_price) * oi.quantity      AS item_price_total
-     , SUM(oi.discount_amount) * oi.quantity AS item_discount_total
-  FROM customers c
-  JOIN orders o
-    ON o.customer_id = c.customer_id
-  JOIN order_items oi
-    ON oi.order_id = o.order_id
- GROUP BY c.customer_id
- ORDER BY item_price_total DESC; 
-
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #4
 #submitted by: Jared
 #updated by:
-#verified by: Laura -- just small format differences, see below
+#verified by: Laura
 
 SELECT c.email_address, 
 count(o.order_id) AS number_of_orders, 
@@ -439,18 +374,6 @@ GROUP BY o.customer_id
 HAVING count(o.order_id) > 1
 ORDER BY total_amount DESC;
 
-SELECT c.email_address
-     , COUNT(o.order_id)   AS count_of_orders
-     , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_order_amount
-  FROM customers c
-  JOIN orders o
-    ON o.customer_id = c.customer_id
-  JOIN order_items oi
-    ON oi.order_id = o.order_id
- GROUP BY c.customer_id    
-HAVING COUNT(o.order_id) > 1
- ORDER BY total_order_amount DESC; 
-
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #5
@@ -459,7 +382,9 @@ HAVING COUNT(o.order_id) > 1
 #verified by: Laura -- our answers show very different results, I have a line for customers with more than one order
 #             Jared -- Your code is correct. It looks like I didn't finish the code and failed to comment it so that
 #                      I would know to come back and finish it. My apologies!
-
+#             Laura - now that I revist this...I am wondering if 'Modify the solution to exercise 4' means take out the clause
+#                     that limits results to customers with more than one order and REPLACE it with logic for item_price > 400
+#                     thoughts?
 /*4.	
 Write a SELECT statement that returns one row for each customer that has orders with these columns:
 The email_address column from the Customers table
@@ -545,24 +470,12 @@ ORDER BY c.email_address ASC;
 #-----------------------------------------------------Part 5; Exercise #8
 #submitted by: Jared
 #updated by:
-#verified by: Laura --on this one we will need to decide on the verbiage that comes out of the IF/GROUPING statements
-#                     we are also off on our totals, somehow mine brings back 2 Gibson Les Paul and yours brings back 3
-#             Jared --I believe the 3rd Gibson Les Paul comes from Order_Items table, order_id 4. Notice that the order
-#                     quantity is 2 and not just 1. As for the verbage of the IF/GROUPING statements, I believe that
-#                     your choice of verbiage is definitely a better choice.
+#verified by: Laura -- I had COUNT(oi.product_id) for total_quantity where you have SUM(oi.quantity)
+#                      Not sure what I was thinking or why I couldn't see that was the difference in our logic. nice work!
 
-SELECT IF(GROUPING(c.category_name) = 1, "All Category Names", c.category_name) as category_name, 
-IF(GROUPING(p.product_name) = 1, "All Product Names", p.product_name) as product_name,
-sum(oi.quantity) AS total_quantity
-FROM categories c JOIN products p
-ON c.category_id = p.category_id
-JOIN order_items oi
-ON p.product_id = oi.product_id
-GROUP BY c.category_name, p.product_name WITH ROLLUP;
- 
 SELECT IF(GROUPING(c.category_name) = 1,'GRAND TOTAL', c.category_name)  AS category_name
      , IF(GROUPING(p.product_name) = 1, 'SUMMARY ROW', p.product_name)   AS product_name
-     , COUNT(oi.product_id)  AS product_quantity
+     , SUM(oi.quantity)  AS total_quantity
   FROM products p
   JOIN categories c
     ON c.category_id = p.category_id
@@ -575,27 +488,27 @@ SELECT IF(GROUPING(c.category_name) = 1,'GRAND TOTAL', c.category_name)  AS cate
 #-----------------------------------------------------Part 5; Exercise #9
 #submitted by: Laura
 #updated by:
-#verified by: Jared - Very impressed! I didn't figure this one out. Missing an ORDER BY statement according to
-#                     the answer provided in class.
+#verified by: Jared
 
 SELECT oi.order_id
      , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_item_amount
-     , SUM(((oi.item_price - oi.discount_amount)) * oi.quantity) OVER (PARTITION BY oi.order_id) AS total_order_amount
-  FROM order_items oi;
+     , SUM((oi.item_price - oi.discount_amount) * oi.quantity) OVER (PARTITION BY oi.order_id) AS total_order_amount
+  FROM order_items oi
+ ORDER BY oi.order_id;  
 
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 5; Exercise #10
 #submitted by: Laura
 #updated by:
-#verified by: *needs review* --very confused about what this one is asking for
-#                       Jared --Very impressed again! I think it's only missing the ORDER BY statement again.
+#verified by: Jared
 
 SELECT oi.order_id
-     , ((oi.item_price - oi.discount_amount)) * oi.quantity  AS total_item_amount
-     , SUM(((oi.item_price - oi.discount_amount)) * oi.quantity) OVER (PARTITION BY oi.order_id) AS total_order_amount
-	 , ROUND(AVG(((oi.item_price - oi.discount_amount)) * oi.quantity) OVER (PARTITION BY oi.order_id),2) AS avg_item_amount     
-  FROM order_items oi;
+     , (oi.item_price - oi.discount_amount) * oi.quantity  AS total_item_amount
+     , SUM((oi.item_price - oi.discount_amount) * oi.quantity) OVER(PARTITION BY oi.order_id ORDER BY (oi.item_price - oi.discount_amount) * oi.quantity) AS total_order_amount
+     , ROUND(AVG((oi.item_price - oi.discount_amount) * oi.quantity) OVER(PARTITION BY oi.order_id),2) AS avg_order_amount     
+  FROM order_items oi
+ ORDER BY oi.order_id;
 
 #------------------------------------------------------------------------
 
@@ -604,14 +517,16 @@ SELECT oi.order_id
 #updated by:
 #verified by: *needs review*  --still working on this one, this is what I have so far.
 #                       Jared --I suppose we'll be using the answer given in class?
+#                       Laura - yes, his explanation helped a lot on this one!
 
 SELECT o.customer_id
      , o.order_date
-     , SUM(((oi.item_price - oi.discount_amount)) * oi.quantity) OVER (PARTITION BY oi.item_id)  AS total_amount_order_item
+     , (oi.item_price - oi.discount_amount) * oi.quantity AS item_total
+     , SUM((oi.item_price - oi.discount_amount) * oi.quantity) OVER(PARTITION BY o.customer_id)  AS customer_total
+     , SUM((oi.item_price - oi.discount_amount) * oi.quantity) OVER(PARTITION BY o.customer_id ORDER BY o.order_date) AS customer_total_by_date
   FROM orders o
   JOIN order_items oi
-    ON oi.order_id = o.order_id
-    #need joins to get to customers and research peer group;
+    ON o.order_id = oi.order_id;
 
 #------------------------------------------------------------------------
 
@@ -622,8 +537,7 @@ SELECT o.customer_id
 #-----------------------------------------------------Part 6; Exercise #1
 #submitted by: Jared
 #updated by:
-#verified by: Laura - I think this one needs an order by statement
-#             Jared - You're 100% correct. Good catch! I updated my code.
+#verified by: Laura
 
 SELECT category_name
 FROM categories
@@ -632,25 +546,12 @@ SELECT category_id
 FROM products)
 ORDER BY category_name;
 
-SELECT c.category_name
-  FROM categories c
- WHERE c.category_id IN (SELECT DISTINCT p.category_id FROM products p)
- ORDER BY c.category_name;
-
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #2
 #submitted by: Jared
 #updated by:
-#verified by: Laura --we need to choose between the HAVING or WHERE clause; return same results
-#             Jared --I prefer WHERE. Can't remember why I chose HAVING at this point.
-
-SELECT product_name, list_price
-FROM products
-HAVING list_price > (
-SELECT AVG(list_price) 
-FROM products)
-ORDER BY list_price DESC;
+#verified by: Laura
 
 SELECT p.product_name
      , p.list_price
@@ -663,9 +564,7 @@ SELECT p.product_name
 #-----------------------------------------------------Part 6; Exercise #3
 #submitted by: Jared
 #updated by:
-#verified by: Laura - slightly different approaches; same results
-#             Jared - They both look good to me.
-
+#verified by: Laura
 
 SELECT category_name
 FROM categories
@@ -674,21 +573,12 @@ SELECT *
 FROM products 
 WHERE products.category_id = categories.category_id);
 
-SELECT c.category_name
-  FROM categories c
- WHERE NOT EXISTS (SELECT 1
-                     FROM products p
-		    WHERE p.category_id = c.category_id);
-
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #4
 #submitted by: Jared
 #updated by:
-#verified by: Laura -- different setups, basically same results. I think your final query might need a title/name
-#                      for the MAX(order_total) field and then ORDER BY that field
-#             Jared -- You're 100% correct. I have updated my "complete query" (didn't add the alias, though) and
-#                      it now works identically to yours. Good catch!
+#verified by: Laura
 
 #Inner Query
 SELECT c.email_address, oi.order_id, 
@@ -698,17 +588,6 @@ ON c.customer_id = o.customer_id
 JOIN order_items oi
 ON oi.order_id = o.order_id
 GROUP BY email_address, order_id;
-
-#Inner Query - laura
-SELECT c.email_address
-     , o.order_id
-     , ((oi.item_price - oi.discount_amount))  AS total_item_amount
-  FROM customers c
-  JOIN orders o
-    ON o.customer_id = c.customer_id
-  JOIN order_items oi
-    ON oi.order_id = o.order_id
- GROUP BY c.email_address, o.order_id; 
 
 #Complete Query
 SELECT email_address, MAX(order_total)
@@ -722,30 +601,12 @@ GROUP BY email_address, order_id) as newTable
 GROUP BY email_address
 ORDER BY MAX(order_total) DESC;
 
-#Complete Query - Laura
-SELECT z.email_address
-     , MAX(z.order_amount)  AS largest_order
-  FROM (
-SELECT c.email_address
-     , o.order_id
-     , ((oi.item_price - oi.discount_amount))  AS order_amount
-  FROM customers c
-  JOIN orders o
-    ON o.customer_id = c.customer_id
-  JOIN order_items oi
-    ON oi.order_id = o.order_id
- GROUP BY c.email_address, o.order_id
-       ) z
- GROUP BY z.email_address
- ORDER BY largest_order DESC;
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #5
 #submitted by: Jared
 #updated by:
-#verified by: Laura - different approaches; same results --we just need to pick one
-#             Jared - Very interesting implementation! Both options are solid so I'll defer to your
-#                     preference. If you don't have a preference, then we can just default to mine.
+#verified by: Laura
 
 SELECT product_name, discount_percent
 FROM products
@@ -756,32 +617,12 @@ GROUP BY discount_percent
 HAVING count(discount_percent) = 1)
 ORDER BY product_name;
 
-SELECT p.product_name
-     , p.discount_percent
-  FROM products p
- WHERE NOT EXISTS(SELECT 1
-                    FROM products p2
-	           WHERE p2.product_id <> p.product_id
-                     AND p2.discount_percent = p.discount_percent)
- ORDER BY p.product_name;
-
 #------------------------------------------------------------------------
 
 #-----------------------------------------------------Part 6; Exercise #6
 #submitted by: Jared
 #updated by:
-#verified by: Laura - different approach; same results
-#             Jared - I feel like your approach is more efficient.
-
-SELECT c.email_address, o.order_id, o.order_date
-FROM customers c JOIN orders o
-ON c.customer_id = o.customer_id
-WHERE o.order_date = (
-SELECT MIN(order_date) 
-FROM orders 
-WHERE order_date = o.order_date)
-GROUP BY c.customer_id
-ORDER BY o.order_date, o.order_id;
+#verified by: Laura
 
 SELECT c.email_address
      , o.order_id
